@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MessageService {
-    Message sendMessage(User user, ChatMessageDTO message);
     List<Message> getMessagesBetween(Long senderId, Long receiverId);
     void markAsRead(UUID messageId);
     void deleteMessage(UUID messageId);
-
+    public Message saveMessage(Long senderId, Long receiverId, String content, String picture);
 }

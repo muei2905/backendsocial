@@ -25,18 +25,24 @@ public class LikeController {
     private LikeNotificationProducer notificationProducer;
 
     @PostMapping("/{postId}")
-    public ResponseEntity<String> likePost(@PathVariable Long postId, @RequestHeader("Authorization") String jwt) throws Exception {
-        Optional<Post> post = postRepository.findById(postId);
+    public ResponseEntity<?> likePost(@PathVariable Long postId, @RequestHeader("Authorization") String jwt) throws Exception {
+        Optional<Post> postOpt = postRepository.findById(postId);
+
+        if (postOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Bài viết không tồn tại!");
+        }
 
         User user = userService.findUserByJwtToken(jwt);
+        Post post = postOpt.get();
 
-        PostLike like = likeService.likePost(post.get(), user);
-        if (like != null) {
+        PostLike like = likeService.toggleLike(user, post);
+
+        if (like != null && like.isLike()) { // Chỉ gửi thông báo khi like
             String notificationMessage = user.getFullName() + " đã thích bài viết của bạn!";
-            String messageWithEmail = notificationMessage + "|" + post.get().getUser().getEmail();
+            String messageWithEmail = notificationMessage + "|" + post.getUser().getEmail();
             notificationProducer.sendLikeNotification(messageWithEmail);
-            return ResponseEntity.ok("Like thành công!");
         }
-        return ResponseEntity.badRequest().body("Like thất bại!");
+
+        return ResponseEntity.ok(like);
     }
 }

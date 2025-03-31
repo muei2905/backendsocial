@@ -17,13 +17,23 @@ public class LikeServiceImp implements LikeService{
     private LikeRepository likeRepository;
     @Autowired
     private PostRepository postRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Override
-    public PostLike likePost(Post post, User user) {
-        PostLike postLike = new PostLike();
-        postLike.setPost(post);
-        postLike.setUser(user);
-        return likeRepository.save(postLike);
+
+    public PostLike toggleLike(User user, Post post) {
+        Optional<PostLike> existingLike = likeRepository.findByUserAndPost(user, post);
+
+        if (existingLike.isPresent()) {
+            PostLike like = existingLike.get();
+            like.setLike(!like.isLike()); // Đảo trạng thái
+            likeRepository.save(like);
+
+            return like.isLike() ? like : null;
+        } else {
+            PostLike newLike = new PostLike();
+            newLike.setLike(true);
+            newLike.setUser(user);
+            newLike.setPost(post);
+            likeRepository.save(newLike);
+            return newLike;
+        }
     }
 }

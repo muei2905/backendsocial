@@ -18,12 +18,6 @@ public class MessageController {
     private MessageService messageService;
     @Autowired
     private UserService userService;
-    @PostMapping("/send")
-    public ResponseEntity<Message> sendMessage(@RequestBody ChatMessageDTO message, @RequestHeader("Authorization") String jwt) throws Exception {
-        User user = userService.findUserByJwtToken(jwt);
-        Message savedMessage = messageService.sendMessage(user, message);
-        return ResponseEntity.ok(savedMessage);
-    }
 
     @GetMapping("/between")
     public ResponseEntity<List<Message>> getMessagesBetween(@RequestHeader("Authorization") String jwt, @RequestParam Long receiverId) throws Exception {

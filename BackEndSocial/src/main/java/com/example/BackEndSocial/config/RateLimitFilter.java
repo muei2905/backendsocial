@@ -25,7 +25,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private boolean performanceTest;
 
     private Bucket createNewBucket() {
-        // Nếu đang bật chế độ test, cấp giới hạn cao hơn
         int limit = performanceTest ? 1000 : 5;
         return Bucket.builder()
                 .addLimit(Bandwidth.classic(limit, Refill.greedy(limit, Duration.ofMinutes(1))))

@@ -24,22 +24,24 @@ public class MessageServiceImp implements MessageService{
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public Message sendMessage(User user, ChatMessageDTO message) {
-        Message savedMessage = new Message();
-        savedMessage.setContent(message.getContent());
-        Optional<User> user1=  userRepository.findById(message.getReceiverID());
-        savedMessage.setReceiverId(user1.get());
-        savedMessage.setSenderId(user);
-        savedMessage.setContent(message.getContent());
-        savedMessage.setPicture(message.getPicture());
-        savedMessage.setTimestamp(String.valueOf(LocalDateTime.now()));
-        messagingTemplate.convertAndSendToUser(
-                String.valueOf(message.getReceiverID()), "/queue/messages", savedMessage
-        );
-        return messageRepository.save(savedMessage);
-    }
 
+    public Message saveMessage(Long senderId, Long receiverId, String content, String picture) {
+        User sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
+        User receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+
+        Message message = new Message();
+        message.setSenderId(sender);
+        message.setReceiverId(receiver);
+        message.setContent(content);
+        message.setPicture(picture);
+        message.setTimestamp(String.valueOf(System.currentTimeMillis()));
+        message.setRead(false);
+        message.setDeleted(false);
+
+        return messageRepository.save(message);
+    }
 
     @Override
     public void deleteMessage(UUID messageId) {

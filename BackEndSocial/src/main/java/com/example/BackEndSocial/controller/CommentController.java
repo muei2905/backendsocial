@@ -10,6 +10,7 @@ import com.example.BackEndSocial.repository.PostRepository;
 import com.example.BackEndSocial.service.CommentService;
 import com.example.BackEndSocial.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +43,16 @@ public class CommentController {
             return ResponseEntity.ok("Bình luận thành công!");
         }
         return ResponseEntity.badRequest().body("Bình luận thất bại!");
+    }
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId, @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        boolean isDeleted = commentService.deleteComment(commentId, user);
+
+        if (isDeleted) {
+            return ResponseEntity.ok("Bình luận đã được xóa!");
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không thể xóa bình luận này!");
     }
 }

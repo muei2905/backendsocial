@@ -16,6 +16,8 @@ public class PostServiceImp implements PostService{
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private FriendService friendService;
 
     @Override
     public Post createPost(PostDTO req, User user) {
@@ -29,7 +31,10 @@ public class PostServiceImp implements PostService{
         post.setViewMode(req.getViewMode() != null ? req.getViewMode() : "public");
         return postRepository.save(post);
     }
-
+    public List<Post> getPostsForUser(Long userId) {
+        List<Long> friendIds = friendService.getFriendIds(userId);
+        return postRepository.findPostsForUser(userId, friendIds);
+    }
     @Override
     public Post updatePost(Long postId, PostDTO updatedPostDto) {
         Post post = postRepository.findById(postId)

@@ -23,14 +23,6 @@ public class NotificationController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Notification> createNotification(@RequestBody NotificationDTO notificationDto, @RequestParam Long userId) {
-        User user = new User();
-        user.setId(userId);
-        Notification notification = notificationService.createNotification(notificationDto, user);
-        return new ResponseEntity<>(notification, HttpStatus.CREATED);
-    }
-
     @GetMapping("/me")
     public ResponseEntity<List<Notification>> getUserNotifications(@RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);

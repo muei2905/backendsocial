@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,7 +20,9 @@ public class FriendServiceImp implements FriendService{
         Friendship friendship = new Friendship(null, user, friend, "PENDING", LocalDateTime.now(), LocalDateTime.now());
         return friendshipRepository.save(friendship);
     }
-
+    public List<Long> getFriendIds(Long userId) {
+        return friendshipRepository.findFriendIdsByUserId(userId);
+    }
     @Override
     public boolean acceptFriend(User user, User friend) {
         Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);

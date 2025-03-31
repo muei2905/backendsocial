@@ -7,6 +7,8 @@ import com.example.BackEndSocial.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CommentServiceImp implements CommentService{
     @Autowired
@@ -19,5 +21,15 @@ public class CommentServiceImp implements CommentService{
         comment.setUser(user);
         comment.setContent(content);
         return commentRepository.save(comment);
+    }
+
+    @Override
+    public boolean deleteComment(Long commentId, User user) {
+        Optional<Comment> commentOpt = commentRepository.findByIdAndUser(commentId, user);
+        if (commentOpt.isPresent()) {
+            commentRepository.delete(commentOpt.get());
+            return true;
+        }
+        return false;
     }
 }

@@ -12,4 +12,5 @@ public interface PostService {
     public Post updatePost(Long postId, PostDTO req);
     public void deletePost(Long postId);
     public List<Post> getPostsByUser(Long userId);
+    public List<Post> getPostsForUser(Long userId);
 }
