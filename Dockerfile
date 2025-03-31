@@ -1,11 +1,17 @@
-# Sử dụng hình ảnh OpenJDK làm base image
+# Sử dụng OpenJDK 17
 FROM openjdk:17-jdk-slim
 
-# Đặt biến môi trường cho vùng làm việc
+# Đặt thư mục làm việc
 WORKDIR /app
 
-# Copy file JAR vào container
-COPY target/myapp.jar app.jar
+# Copy toàn bộ dự án vào container
+COPY . .
+
+# Cấp quyền thực thi cho mvnw
+RUN chmod +x mvnw
+
+# Build ứng dụng
+RUN ./mvnw clean package -DskipTests
 
 # Chạy ứng dụng
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "target/*.jar"]
