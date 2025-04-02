@@ -46,8 +46,11 @@ public class AppConfig {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfs = new CorsConfiguration();
-                cfs.setAllowedOrigins(Collections.singletonList("*"));
+                cfs.setAllowedOrigins(Arrays.asList(
+                        "http://localhost:3000", "http://localhost:5173", "http://localhost:5174"
+                ));
                 cfs.setAllowedMethods(Collections.singletonList("*"));
+                cfs.setAllowCredentials(true);
                 cfs.setAllowedHeaders(Collections.singletonList("*"));
                 cfs.setExposedHeaders(Arrays.asList("Authorization"));
                 cfs.setMaxAge(3600L);
