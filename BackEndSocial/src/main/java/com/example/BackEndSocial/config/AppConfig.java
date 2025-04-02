@@ -47,7 +47,7 @@ public class AppConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfs = new CorsConfiguration();
                 cfs.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:3000", "http://127.0.0.1:3000"
+                        "http://localhost:3000", "http://127.0.0.1:3000", "https://backendsocial-1.onrender.com"
                 ));
                 cfs.setAllowedMethods(Collections.singletonList("*"));
                 cfs.setAllowCredentials(true);
