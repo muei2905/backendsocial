@@ -48,7 +48,6 @@ public class AppConfig {
                 CorsConfiguration cfs = new CorsConfiguration();
                 cfs.setAllowedOrigins(Collections.singletonList("*"));
                 cfs.setAllowedMethods(Collections.singletonList("*"));
-                cfs.setAllowCredentials(true);
                 cfs.setAllowedHeaders(Collections.singletonList("*"));
                 cfs.setExposedHeaders(Arrays.asList("Authorization"));
                 cfs.setMaxAge(3600L);
