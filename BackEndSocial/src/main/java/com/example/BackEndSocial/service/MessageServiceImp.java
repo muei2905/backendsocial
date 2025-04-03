@@ -32,8 +32,8 @@ public class MessageServiceImp implements MessageService{
                 .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
         Message message = new Message();
-        message.setSenderId(sender);
-        message.setReceiverId(receiver);
+        message.setSender(sender);
+        message.setReceiver(receiver);
         message.setContent(content);
         message.setPicture(picture);
         message.setTimestamp(String.valueOf(System.currentTimeMillis()));

@@ -11,10 +11,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public interface MessageRepository extends JpaRepository<Message, UUID> {
     List<Message> findBySenderIdAndReceiverId(User senderId, User receiverId);
-    @Query("SELECT DISTINCT u FROM User u " +
-            "WHERE u.id IN (SELECT m.sender.id FROM Message m WHERE m.receiver.id = :userId) " +
-            "OR u.id IN (SELECT m.receiver.id FROM Message m WHERE m.sender.id = :userId)")
+
+    // Truy vấn danh sách user đã từng nhắn tin với userId
+    @Query("SELECT DISTINCT m.sender FROM Message m WHERE m.receiver.id = :userId " +
+            "UNION " +
+            "SELECT DISTINCT m.receiver FROM Message m WHERE m.sender.id = :userId")
     List<User> findContactsByUserId(@Param("userId") Long userId);
 }
