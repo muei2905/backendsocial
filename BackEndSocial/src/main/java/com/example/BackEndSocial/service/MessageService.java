@@ -12,4 +12,5 @@ public interface MessageService {
     void markAsRead(UUID messageId);
     void deleteMessage(UUID messageId);
     public Message saveMessage(Long senderId, Long receiverId, String content, String picture);
+    public List<User> getUserContacts(Long userId);
 }

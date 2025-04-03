@@ -44,6 +44,11 @@ public class MessageServiceImp implements MessageService{
     }
 
     @Override
+    public List<User> getUserContacts(Long userId) {
+        return messageRepository.findContactsByUserId(userId);
+    }
+
+    @Override
     public void deleteMessage(UUID messageId) {
         Message message = messageRepository.findById(messageId).orElseThrow();
         message.setDeleted(true);

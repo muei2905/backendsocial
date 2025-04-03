@@ -36,4 +36,12 @@ public class MessageController {
         messageService.deleteMessage(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/contacts")
+    public ResponseEntity<List<User>> getUserContacts(@RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        List<User> contacts = messageService.getUserContacts(user.getId());
+        return ResponseEntity.ok(contacts);
+    }
+
 }
