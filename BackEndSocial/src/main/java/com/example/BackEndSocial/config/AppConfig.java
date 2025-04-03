@@ -20,11 +20,11 @@ import java.util.Collections;
 @EnableWebSecurity
 public class AppConfig {
 
-//    private final RateLimitFilter rateLimitFilter;
-//
-//    public AppConfig(RateLimitFilter rateLimitFilter) {
-//        this.rateLimitFilter = rateLimitFilter;
-//    }
+    private final RateLimitFilter rateLimitFilter;
+
+    public AppConfig(RateLimitFilter rateLimitFilter) {
+        this.rateLimitFilter = rateLimitFilter;
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
