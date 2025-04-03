@@ -20,11 +20,11 @@ import java.util.Collections;
 @EnableWebSecurity
 public class AppConfig {
 
-    private final RateLimitFilter rateLimitFilter;
-
-    public AppConfig(RateLimitFilter rateLimitFilter) {
-        this.rateLimitFilter = rateLimitFilter;
-    }
+//    private final RateLimitFilter rateLimitFilter;
+//
+//    public AppConfig(RateLimitFilter rateLimitFilter) {
+//        this.rateLimitFilter = rateLimitFilter;
+//    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,7 +34,7 @@ public class AppConfig {
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().permitAll())
-                .addFilterBefore(rateLimitFilter, BasicAuthenticationFilter.class) // Thêm filter vào trước JwtTokenValidator
+//                .addFilterBefore(rateLimitFilter, BasicAuthenticationFilter.class) // Thêm filter vào trước JwtTokenValidator
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigrationSource()));

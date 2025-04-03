@@ -29,6 +29,7 @@ public class ChatController {
 
         messagingTemplate.convertAndSendToUser(senderId.toString(), "/queue/messages", message);
 
+
         messagingTemplate.convertAndSendToUser(receiverId.toString(), "/queue/messages", message);
     }
 }
