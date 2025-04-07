@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -77,5 +78,14 @@ public class FriendController {
             }
         }
         return ResponseEntity.badRequest().body("Không thể hủy kết bạn!");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchFriendsByName(
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody  String name) throws Exception {
+        User user= userService.findUserByJwtToken(jwt);
+        List<User> friends = friendshipService.searchFriendsByFullName(user.getId(), name);
+        return ResponseEntity.ok(friends);
     }
 }

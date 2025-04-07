@@ -20,7 +20,7 @@ public class MessageController {
     private UserService userService;
 
     @GetMapping("/between")
-    public ResponseEntity<List<Message>> getMessagesBetween(@RequestHeader("Authorization") String jwt, @RequestParam Long receiverId) throws Exception {
+    public ResponseEntity<List<Message>> getMessagesBetween(@RequestHeader("Authorization") String jwt, @RequestBody Long receiverId) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
         return ResponseEntity.ok(messageService.getMessagesBetween(user.getId(), receiverId));
     }

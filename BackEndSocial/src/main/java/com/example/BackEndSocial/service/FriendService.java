@@ -10,4 +10,5 @@ public interface FriendService {
     boolean acceptFriend(User user, User friend);
     boolean unfriend(User user, User friend);
     List<Long> getFriendIds(Long userId);
+    public List<User> searchFriendsByFullName(Long userId, String name);
 }

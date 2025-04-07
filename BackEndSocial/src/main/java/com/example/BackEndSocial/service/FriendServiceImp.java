@@ -41,8 +41,10 @@ public class FriendServiceImp implements FriendService{
 
         return false;
     }
-
-
+    @Override
+    public List<User> searchFriendsByFullName(Long userId, String name) {
+        return friendshipRepository.findFriendsByFullName(userId, name);
+    }
     @Override
     public boolean unfriend(User user, User friend) {
         Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);
