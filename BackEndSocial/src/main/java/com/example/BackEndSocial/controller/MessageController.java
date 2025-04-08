@@ -26,13 +26,13 @@ public class MessageController {
     }
 
     @PatchMapping("/read/{id}")
-    public ResponseEntity<Void> markAsRead(@PathVariable UUID id) {
+    public ResponseEntity<Void> markAsRead(@PathVariable Long id) {
         messageService.markAsRead(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable UUID id, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<Void> deleteMessage(@PathVariable Long id, @RequestHeader("Authorization") String jwt) {
         messageService.deleteMessage(id);
         return ResponseEntity.ok().build();
     }
