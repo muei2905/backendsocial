@@ -24,14 +24,29 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public void handlePrivateMessage(Map<String, Object> payload) {
-        MessageDTO messageDTO= new MessageDTO();
-        messageDTO.setSender(Long.parseLong(payload.get("senderId").toString()));
-        messageDTO.setReceiver(Long.parseLong(payload.get("receiverId").toString()));
-        messageDTO.setContent(payload.get("content").toString());
-        messageDTO.setPicture(payload.get("picture") != null ? payload.get("picture").toString() : null);
-        messageDTO.setTimeStamp(String.valueOf(System.currentTimeMillis()));
-        messagingTemplate.convertAndSendToUser(messageDTO.getSender().toString(), "/queue/messages", messageDTO);
-        messagingTemplate.convertAndSendToUser(messageDTO.getReceiver().toString(), "/queue/messages", messageDTO);
-        Message message = messageService.saveMessage(messageDTO);
+        System.out.println("Received payload: " + payload);
+        try {
+            MessageDTO messageDTO = new MessageDTO();
+            messageDTO.setSender(Long.parseLong(payload.get("senderId").toString()));
+            messageDTO.setReceiver(Long.parseLong(payload.get("receiverId").toString()));
+            messageDTO.setContent(payload.get("content").toString());
+            messageDTO.setPicture(payload.get("picture") != null ? payload.get("picture").toString() : null);
+            messageDTO.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+
+            // Lưu vào DB trước khi gửi
+            System.out.println("Saving message to DB: " + messageDTO);
+            Message message = messageService.saveMessage(messageDTO);
+            System.out.println("Save successful: " + message);
+
+            // Gửi tin nhắn sau khi lưu thành công
+            System.out.println("Sending to sender: " + messageDTO.getSender());
+            messagingTemplate.convertAndSendToUser(messageDTO.getSender().toString(), "/queue/messages", messageDTO);
+            System.out.println("Sending to receiver: " + messageDTO.getReceiver());
+            messagingTemplate.convertAndSendToUser(messageDTO.getReceiver().toString(), "/queue/messages", messageDTO);
+            System.out.println("Send successful to users");
+        } catch (Exception e) {
+            System.err.println("Error in handlePrivateMessage: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
