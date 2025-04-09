@@ -24,12 +24,37 @@ public class JwtProvider {
                 .compact();
         return jwt;
     }
+
+    public String getEmailFromRawJwtToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject(); // subject chứa email trong OTP token
+    }
+
+
     public String getEmailFromJwtToken(String jwt){
-        jwt = jwt.substring(7);
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-        String email = String.valueOf(claims.get("email"));
+        if (jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
+        }
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+
+        // Trường hợp có "email" claim → dùng, không thì lấy subject
+        String email = claims.get("email", String.class);
+        if (email == null) {
+            email = claims.getSubject();
+        }
+
         return email;
     }
+
     private String populateAuthorities(Collection <? extends GrantedAuthority> authorities){
         Set<String> auths= new HashSet<>();
         for (GrantedAuthority authority:authorities){

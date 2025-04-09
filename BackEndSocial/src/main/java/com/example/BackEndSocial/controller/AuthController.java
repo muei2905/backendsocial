@@ -135,7 +135,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new PasswordResponse(null, "OTP không hợp lệ hoặc đã hết hạn."));
         }
 
-        String email = jwtProvider.getEmailFromJwtToken(token);
+        String email = jwtProvider.getEmailFromRawJwtToken(token);
         String tempJwt = jwtProvider.generateTemporaryToken(email);
         System.out.println("Email: " + email);
         return ResponseEntity.ok(new PasswordResponse(tempJwt, "OTP hợp lệ. Bạn có thể đặt lại mật khẩu."));

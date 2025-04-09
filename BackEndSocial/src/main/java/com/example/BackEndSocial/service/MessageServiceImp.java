@@ -65,9 +65,8 @@ public class MessageServiceImp implements MessageService{
     public List<Message> getMessagesBetween(Long senderId, Long receiverId) {
         User sender = userRepository.findById(senderId).orElseThrow();
         User receiver = userRepository.findById(receiverId).orElseThrow();
-        return messageRepository.findBySenderIdAndReceiverId(sender, receiver);
+        return messageRepository.findBySenderAndReceiver(sender, receiver);
     }
-
 
     @Override
     public void markAsRead(Long messageId) {

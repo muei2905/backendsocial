@@ -3,6 +3,7 @@ package com.example.BackEndSocial.controller;
 import com.example.BackEndSocial.DTO.PostDTO;
 import com.example.BackEndSocial.model.Post;
 import com.example.BackEndSocial.model.User;
+import com.example.BackEndSocial.response.PostResponse;
 import com.example.BackEndSocial.service.PostService;
 import com.example.BackEndSocial.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,26 +42,26 @@ public class PostController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<Post>> getMyPosts(@RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<List<PostResponse>> getMyPosts(@RequestHeader("Authorization") String jwt) throws Exception {
         User user= userService.findUserByJwtToken(jwt);
-        List<Post> posts = postService.getPostsByUser(user.getId());
+        List<PostResponse> posts = postService.getPostsByUser(user.getId());
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String jwt) {
-        List<Post> posts = postService.getPostsByUser(userId);
+    public ResponseEntity<List<PostResponse>> getPostsByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String jwt) {
+        List<PostResponse> posts = postService.getPostsByUser(userId);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<Post>> getUserFeed(@RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<List<PostResponse>> getUserFeed(@RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        List<Post> posts = postService.getPostsForUser(user.getId());
+        List<PostResponse> posts = postService.getPostsForUser(user.getId());
         return ResponseEntity.ok(posts);
     }
 }

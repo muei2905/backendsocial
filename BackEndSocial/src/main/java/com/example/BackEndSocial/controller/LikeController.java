@@ -37,7 +37,7 @@ public class LikeController {
 
         PostLike like = likeService.toggleLike(user, post);
 
-        if (like != null && like.isLike()) { // Chỉ gửi thông báo khi like
+        if (like != null && like.isLike()) {
             String notificationMessage = user.getFullName() + " đã thích bài viết của bạn!";
             String messageWithEmail = notificationMessage + "|" + post.getUser().getEmail();
             notificationProducer.sendLikeNotification(messageWithEmail);
