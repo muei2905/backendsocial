@@ -35,9 +35,22 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> deletePost(@PathVariable Long postId, @RequestHeader("Authorization") String jwt) {
         postService.deletePost(postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<Post>> getMyPosts(@RequestHeader("Authorization") String jwt) throws Exception {
+        User user= userService.findUserByJwtToken(jwt);
+        List<Post> posts = postService.getPostsByUser(user.getId());
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String jwt) {
+        List<Post> posts = postService.getPostsByUser(userId);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping("/feed")

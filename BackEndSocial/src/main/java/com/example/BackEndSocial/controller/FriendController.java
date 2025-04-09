@@ -83,7 +83,7 @@ public class FriendController {
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchFriendsByName(
             @RequestHeader("Authorization") String jwt,
-            @RequestBody  String name) throws Exception {
+            @RequestParam String name) throws Exception {
         User user= userService.findUserByJwtToken(jwt);
         List<User> friends = friendshipService.searchFriendsByFullName(user.getId(), name);
         return ResponseEntity.ok(friends);

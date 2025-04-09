@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MessageDTO {
-    private Long sender;
-    private Long receiver;
+    private Long senderId;
+    private Long receiverId;
     private String content;
     private String picture;
     private String timeStamp;

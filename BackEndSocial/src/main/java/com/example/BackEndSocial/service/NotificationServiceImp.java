@@ -37,7 +37,7 @@ public class NotificationServiceImp implements NotificationService{
     }
 
     @Override
-    public void markAsRead(UUID id) {
+    public void markAsRead(Long id) {
         Notification notification = notificationRepository.findById(id).orElseThrow(() -> new RuntimeException("Notification not found"));
         notification.setRead(true);
         notificationRepository.save(notification);

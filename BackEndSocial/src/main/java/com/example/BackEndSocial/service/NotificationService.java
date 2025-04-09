@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface NotificationService {
     Notification createNotification(NotificationDTO notificationDto, User user);
     List<Notification> getNotificationsByUser(Long token);
-    void markAsRead(UUID id);
+    void markAsRead(Long id);
 }

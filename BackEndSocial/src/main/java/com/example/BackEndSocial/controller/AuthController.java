@@ -12,6 +12,7 @@ import com.example.BackEndSocial.response.AuthResponse;
 import com.example.BackEndSocial.response.PasswordResponse;
 import com.example.BackEndSocial.service.EmailService;
 import com.example.BackEndSocial.service.ProUserDetailsService;
+import com.example.BackEndSocial.service.UserService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -40,6 +43,8 @@ public class AuthController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -100,7 +105,14 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) throws MessagingException {
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) throws Exception {
+        User user = userService.findUserByEmail(request.getEmail());
+
+        if (user == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Email không tồn tại trong hệ thống");
+        }
         String otpToken = jwtProvider.generateOtpToken(request.getEmail());
         String otpCode = jwtProvider.extractOtpFromToken(otpToken); // Lấy mã OTP từ token
 

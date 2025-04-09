@@ -31,7 +31,7 @@ public class NotificationController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> markAsRead(@PathVariable UUID id) {
+    public ResponseEntity<Void> markAsRead(@PathVariable Long id, @RequestHeader("Authorization") String jwt) {
         notificationService.markAsRead(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

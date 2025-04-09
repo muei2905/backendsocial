@@ -5,12 +5,16 @@ import com.example.BackEndSocial.model.Message;
 import com.example.BackEndSocial.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
 import java.util.Map;
 @Slf4j
 @Controller
@@ -20,33 +24,20 @@ public class ChatController {
     @Autowired
     private MessageService messageService;
 
-
+    @Autowired
+    private SimpUserRegistry simpUserRegistry;
 
     @MessageMapping("/chat")
-    public void handlePrivateMessage(Map<String, Object> payload) {
-        System.out.println("Received payload: " + payload);
-        try {
-            MessageDTO messageDTO = new MessageDTO();
-            messageDTO.setSender(Long.parseLong(payload.get("senderId").toString()));
-            messageDTO.setReceiver(Long.parseLong(payload.get("receiverId").toString()));
-            messageDTO.setContent(payload.get("content").toString());
-            messageDTO.setPicture(payload.get("picture") != null ? payload.get("picture").toString() : null);
-            messageDTO.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+    public Message recMessage(@Payload MessageDTO messageDTO, Principal principal, @Header("simpSessionId") String sessionId) {
+        System.out.println("Received from Principal: " + (principal != null ? principal.getName() : "null") + ", Session ID: " + sessionId);
+        System.out.println("Connected users: " + simpUserRegistry.getUsers());
+        System.out.println(messageDTO);
+        messagingTemplate.convertAndSendToUser(String.valueOf(messageDTO.getReceiverId()), "/queue/messages", messageDTO);
+        messagingTemplate.convertAndSendToUser(String.valueOf(messageDTO.getSenderId()), "/queue/messages", messageDTO);
 
-            // Lưu vào DB trước khi gửi
-            System.out.println("Saving message to DB: " + messageDTO);
-            Message message = messageService.saveMessage(messageDTO);
-            System.out.println("Save successful: " + message);
-
-            // Gửi tin nhắn sau khi lưu thành công
-            System.out.println("Sending to sender: " + messageDTO.getSender());
-            messagingTemplate.convertAndSendToUser(messageDTO.getSender().toString(), "/queue/messages", messageDTO);
-            System.out.println("Sending to receiver: " + messageDTO.getReceiver());
-            messagingTemplate.convertAndSendToUser(messageDTO.getReceiver().toString(), "/queue/messages", messageDTO);
-            System.out.println("Send successful to users");
-        } catch (Exception e) {
-            System.err.println("Error in handlePrivateMessage: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("Sent to /user/" + messageDTO.getReceiverId() + "/queue/messages");
+        Message message = messageService.saveMessage(messageDTO);
+        return message;
     }
+
 }

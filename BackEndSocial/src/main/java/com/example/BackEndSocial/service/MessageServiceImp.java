@@ -33,9 +33,9 @@ public class MessageServiceImp implements MessageService{
 
     @Override
     public Message saveMessage(MessageDTO messageDTO) {
-        User sender = userRepository.findById(messageDTO.getSender())
+        User sender = userRepository.findById(messageDTO.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Sender not found"));
-        User receiver = userRepository.findById(messageDTO.getReceiver())
+        User receiver = userRepository.findById(messageDTO.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Receiver not found"));
 
         Message message = new Message();

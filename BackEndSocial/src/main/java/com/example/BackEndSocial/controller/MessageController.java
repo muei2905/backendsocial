@@ -26,7 +26,7 @@ public class MessageController {
     }
 
     @PatchMapping("/read/{id}")
-    public ResponseEntity<Void> markAsRead(@PathVariable Long id) {
+    public ResponseEntity<Void> markAsRead(@PathVariable Long id, @RequestHeader("Authorization") String jwt) {
         messageService.markAsRead(id);
         return ResponseEntity.ok().build();
     }
