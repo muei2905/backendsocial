@@ -34,7 +34,7 @@ public class AppConfig {
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().permitAll())
-//                .addFilterBefore(rateLimitFilter, BasicAuthenticationFilter.class) // Thêm filter vào trước JwtTokenValidator
+                .addFilterBefore(rateLimitFilter, BasicAuthenticationFilter.class) // Thêm filter vào trước JwtTokenValidator
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigrationSource()));

@@ -13,12 +13,11 @@ import java.util.*;
 @Service
 public class JwtProvider {
     private SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-
     public String generateToken(Authentication auth){
         Collection<? extends GrantedAuthority> authorities= auth.getAuthorities();
         String roles = populateAuthorities(authorities);
         String jwt= Jwts.builder().setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + 86400000))
+                .setExpiration((new Date(new Date().getTime()+864000)))
                 .claim("email", auth.getName())
                 .claim("authorities", roles)
                 .signWith(key)
@@ -26,11 +25,9 @@ public class JwtProvider {
         return jwt;
     }
     public String getEmailFromJwtToken(String jwt){
-        if (jwt != null && jwt.startsWith("Bearer ")) {
-            jwt = jwt.substring(7);
-        }
+        jwt = jwt.substring(7);
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-        String email = claims.getSubject(); // Lấy từ "sub" thay vì "email"
+        String email = String.valueOf(claims.get("email"));
         return email;
     }
     private String populateAuthorities(Collection <? extends GrantedAuthority> authorities){
