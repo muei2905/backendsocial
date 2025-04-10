@@ -1,6 +1,7 @@
 package com.example.BackEndSocial.controller;
 
 import com.example.BackEndSocial.DTO.ChatMessageDTO;
+import com.example.BackEndSocial.DTO.ContactPreviewDTO;
 import com.example.BackEndSocial.model.Message;
 import com.example.BackEndSocial.model.User;
 import com.example.BackEndSocial.service.MessageService;
@@ -38,10 +39,11 @@ public class MessageController {
     }
 
     @GetMapping("/contacts")
-    public ResponseEntity<List<User>> getUserContacts(@RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<List<ContactPreviewDTO>> getContactsWithLastMessage(@RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
-        List<User> contacts = messageService.getUserContacts(user.getId());
+        List<ContactPreviewDTO> contacts = messageService.getContactsWithLastMessage(user.getId());
         return ResponseEntity.ok(contacts);
     }
+
 
 }

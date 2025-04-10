@@ -1,6 +1,7 @@
 package com.example.BackEndSocial.service;
 
 import com.example.BackEndSocial.DTO.ChatMessageDTO;
+import com.example.BackEndSocial.DTO.ContactPreviewDTO;
 import com.example.BackEndSocial.DTO.MessageDTO;
 import com.example.BackEndSocial.model.Message;
 import com.example.BackEndSocial.model.User;
@@ -14,4 +15,5 @@ public interface MessageService {
     void deleteMessage(Long messageId);
     public Message saveMessage(MessageDTO messageDTO);
     public List<User> getUserContacts(Long userId);
+    public List<ContactPreviewDTO> getContactsWithLastMessage(Long userId);
 }

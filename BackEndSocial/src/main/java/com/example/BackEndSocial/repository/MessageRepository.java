@@ -21,4 +21,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             "SELECT DISTINCT m.receiver FROM Message m WHERE m.sender.id = :userId AND m.receiver.id <> :userId")
     List<User> findContactsByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT m FROM Message m WHERE " +
+            "(m.sender.id = :userId AND m.receiver.id = :contactId) OR " +
+            "(m.sender.id = :contactId AND m.receiver.id = :userId) " +
+            "ORDER BY m.createdAt DESC")
+    List<Message> findLastMessageBetween(@Param("userId") Long userId, @Param("contactId") Long contactId);
+
 }

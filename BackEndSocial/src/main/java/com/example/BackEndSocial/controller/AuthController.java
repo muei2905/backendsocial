@@ -127,18 +127,18 @@ public class AuthController {
         String token = request.getToken();
         String otp = request.getOtp();
         if (token == null || otp == null) {
-            return ResponseEntity.badRequest().body(new PasswordResponse(null, "Token hoặc OTP không được để trống."));
+            return ResponseEntity.badRequest().body(new PasswordResponse(null, "Token or OTP không được để trống."));
         }
 
         boolean isValid = jwtProvider.validateOtpToken(token, otp);
         if (!isValid) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new PasswordResponse(null, "OTP không hợp lệ hoặc đã hết hạn."));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new PasswordResponse(null, "OTP no valid"));
         }
 
         String email = jwtProvider.getEmailFromRawJwtToken(token);
         String tempJwt = jwtProvider.generateTemporaryToken(email);
         System.out.println("Email: " + email);
-        return ResponseEntity.ok(new PasswordResponse(tempJwt, "OTP hợp lệ. Bạn có thể đặt lại mật khẩu."));
+        return ResponseEntity.ok(new PasswordResponse(tempJwt, "OTP valid. You can reset password."));
     }
 
 

@@ -1,7 +1,9 @@
 package com.example.BackEndSocial.service;
 
 import com.example.BackEndSocial.DTO.ChatMessageDTO;
+import com.example.BackEndSocial.DTO.ContactPreviewDTO;
 import com.example.BackEndSocial.DTO.MessageDTO;
+import com.example.BackEndSocial.DTO.MessagePreviewDTO;
 import com.example.BackEndSocial.model.Message;
 import com.example.BackEndSocial.model.User;
 import com.example.BackEndSocial.repository.MessageRepository;
@@ -12,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,6 +56,33 @@ public class MessageServiceImp implements MessageService{
     @Override
     public List<User> getUserContacts(Long userId) {
         return messageRepository.findContactsByUserId(userId);
+    }
+    @Override
+    public List<ContactPreviewDTO> getContactsWithLastMessage(Long userId) {
+        List<User> contacts = messageRepository.findContactsByUserId(userId);
+        List<ContactPreviewDTO> result = new ArrayList<>();
+
+        for (User contact : contacts) {
+            List<Message> messages = messageRepository.findLastMessageBetween(userId, contact.getId());
+            if (!messages.isEmpty()) {
+                Message lastMessage = messages.get(0);
+                boolean sentByCurrentUser = lastMessage.getSender().getId().equals(userId);
+                MessagePreviewDTO preview = new MessagePreviewDTO(
+                        lastMessage.getContent(),
+                        sentByCurrentUser,
+                        lastMessage.getTimestamp()
+                );
+
+                result.add(new ContactPreviewDTO(
+                        contact.getId(),
+                        contact.getFullName(),
+                        contact.getAvatar(),
+                        preview
+                ));
+            }
+        }
+
+        return result;
     }
 
     @Override

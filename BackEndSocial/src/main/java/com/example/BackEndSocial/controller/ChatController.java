@@ -29,13 +29,8 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public Message recMessage(@Payload MessageDTO messageDTO, Principal principal, @Header("simpSessionId") String sessionId) {
-        System.out.println("Received from Principal: " + (principal != null ? principal.getName() : "null") + ", Session ID: " + sessionId);
-        System.out.println("Connected users: " + simpUserRegistry.getUsers());
-        System.out.println(messageDTO);
         messagingTemplate.convertAndSendToUser(String.valueOf(messageDTO.getReceiverId()), "/queue/messages", messageDTO);
         messagingTemplate.convertAndSendToUser(String.valueOf(messageDTO.getSenderId()), "/queue/messages", messageDTO);
-
-        System.out.println("Sent to /user/" + messageDTO.getReceiverId() + "/queue/messages");
         Message message = messageService.saveMessage(messageDTO);
         return message;
     }
