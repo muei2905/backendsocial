@@ -9,6 +9,10 @@ import com.example.BackEndSocial.model.User;
 import com.example.BackEndSocial.repository.MessageRepository;
 import com.example.BackEndSocial.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -92,11 +96,11 @@ public class MessageServiceImp implements MessageService{
         messageRepository.save(message);
     }
     @Override
-    public List<Message> getMessagesBetween(Long senderId, Long receiverId) {
-        User sender = userRepository.findById(senderId).orElseThrow();
-        User receiver = userRepository.findById(receiverId).orElseThrow();
-        return messageRepository.findBySenderAndReceiver(sender, receiver);
+    public Page<Message> getMessagesBetween(Long userId, Long contactId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return messageRepository.findMessagesBetweenPaged(userId, contactId, pageable);
     }
+
 
     @Override
     public void markAsRead(Long messageId) {

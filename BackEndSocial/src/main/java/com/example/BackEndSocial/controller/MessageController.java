@@ -7,6 +7,7 @@ import com.example.BackEndSocial.model.User;
 import com.example.BackEndSocial.service.MessageService;
 import com.example.BackEndSocial.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +22,17 @@ public class MessageController {
     private UserService userService;
 
     @GetMapping("/between")
-    public ResponseEntity<List<Message>> getMessagesBetween(@RequestHeader("Authorization") String jwt, @RequestBody Long receiverId) throws Exception {
+    public ResponseEntity<Page<Message>> getMessagesBetween(
+            @RequestHeader("Authorization") String jwt,
+            @RequestParam Long receiverId,
+            @RequestParam int page,
+            @RequestParam(defaultValue = "20") int size) throws Exception {
+
         User user = userService.findUserByJwtToken(jwt);
-        return ResponseEntity.ok(messageService.getMessagesBetween(user.getId(), receiverId));
+        Page<Message> messages = messageService.getMessagesBetween(user.getId(), receiverId, page, size);
+        return ResponseEntity.ok(messages);
     }
+
 
     @PatchMapping("/read/{id}")
     public ResponseEntity<Void> markAsRead(@PathVariable Long id, @RequestHeader("Authorization") String jwt) {
