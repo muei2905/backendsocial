@@ -10,8 +10,12 @@ import java.util.UUID;
 
 public interface PostService {
     public Post createPost(PostDTO req, User user);
+
     public Post updatePost(Long postId, PostDTO req);
+
     public void deletePost(Long postId);
+
     public List<PostResponse> getPostsByUser(Long userId);
-    public List<PostResponse> getPostsForUser(Long userId);
+
+    public List<PostResponse> getPostsForUser(Long userId, int page, int size);
 }

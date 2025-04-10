@@ -9,6 +9,10 @@ import com.example.BackEndSocial.response.CommentResponse;
 import com.example.BackEndSocial.response.PostLikeUserResponse;
 import com.example.BackEndSocial.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,11 +40,14 @@ public class PostServiceImp implements PostService{
         post.setViewMode(req.getViewMode() != null ? req.getViewMode() : "public");
         return postRepository.save(post);
     }
-    public List<PostResponse> getPostsForUser(Long userId) {
+    @Override
+    public List<PostResponse> getPostsForUser(Long userId, int page, int size) {
         List<Long> friendIds = friendService.getFriendIds(userId);
-        List<Post> posts = postRepository.findPostsForUser(userId, friendIds);
-        return posts.stream().map(this::mapToPostResponse).collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+        Page<Post> postPage = postRepository.findPostsForUser(userId, friendIds, pageable);
+        return postPage.stream().map(this::mapToPostResponse).collect(Collectors.toList());
     }
+
     @Override
     public Post updatePost(Long postId, PostDTO updatedPostDto) {
         Post post = postRepository.findById(postId)

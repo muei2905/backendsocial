@@ -55,13 +55,16 @@ public class PostController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<PostResponse>> getUserFeed(@RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<List<PostResponse>> getUserFeed(
+            @RequestHeader("Authorization") String jwt,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-        List<PostResponse> posts = postService.getPostsForUser(user.getId());
+        List<PostResponse> posts = postService.getPostsForUser(user.getId(), page, size);
         return ResponseEntity.ok(posts);
     }
 }
