@@ -18,12 +18,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findBySenderAndReceiver(User sender, User receiver);
 
     @Query("SELECT m FROM Message m WHERE " +
-            "(m.sender.id = :userId AND m.receiver.id = :contactId) OR " +
-            "(m.sender.id = :contactId AND m.receiver.id = :userId) " +
-            "ORDER BY m.createdAt DESC")
-    Page<Message> findMessagesBetweenPaged(@Param("userId") Long userId,
-                                           @Param("contactId") Long contactId,
-                                           Pageable pageable);
+            "(m.sender.id = :userId1 AND m.receiver.id = :userId2) OR " +
+            "(m.sender.id = :userId2 AND m.receiver.id = :userId1) " +
+            "ORDER BY m.timestamp DESC")
+    Page<Message> findMessagesBetweenPaged(Long userId1, Long userId2, Pageable pageable);
 
 
     // Truy vấn danh sách user đã từng nhắn tin với userId
@@ -35,7 +33,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("SELECT m FROM Message m WHERE " +
             "(m.sender.id = :userId AND m.receiver.id = :contactId) OR " +
             "(m.sender.id = :contactId AND m.receiver.id = :userId) " +
-            "ORDER BY m.createdAt DESC")
+            "ORDER BY m.timestamp DESC")
     List<Message> findLastMessageBetween(@Param("userId") Long userId, @Param("contactId") Long contactId);
 
 }
