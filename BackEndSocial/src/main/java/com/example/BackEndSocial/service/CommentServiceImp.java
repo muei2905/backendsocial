@@ -8,6 +8,7 @@ import com.example.BackEndSocial.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,7 @@ public class CommentServiceImp implements CommentService{
         comment.setPost(post);
         comment.setUser(user);
         comment.setContent(content);
+        comment.setTime(LocalDateTime.now());
         // +1 vào totalCmt
         post.setTotalCmt(post.getTotalCmt() + 1);
 
