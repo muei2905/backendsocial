@@ -97,7 +97,7 @@ public class MessageServiceImp implements MessageService{
     }
     @Override
     public Page<Message> getMessagesBetween(Long userId, Long contactId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());
         return messageRepository.findMessagesBetweenPaged(userId, contactId, pageable);
     }
 

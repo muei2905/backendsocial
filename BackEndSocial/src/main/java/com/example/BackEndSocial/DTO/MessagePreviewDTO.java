@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 public class MessagePreviewDTO {
     private String content;
     private boolean sentByCurrentUser;
-    private String createdAt;
+    private String timestamp;
 
 }
