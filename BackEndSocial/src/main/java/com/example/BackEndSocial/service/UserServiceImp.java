@@ -28,4 +28,15 @@ public class UserServiceImp implements UserService{
         }
         return user;
     }
+
+    @Override
+    public User updateUserProfile(Long userId, String fullName, String avatar) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setFullName(fullName);
+        user.setAvatar(avatar);
+
+        return userRepository.save(user);
+    }
 }
