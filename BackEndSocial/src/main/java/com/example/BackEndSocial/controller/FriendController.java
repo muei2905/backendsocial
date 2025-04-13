@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/friendships")
+@RequestMapping("/api/friendships")
 public class FriendController {
     @Autowired
     private FriendService friendshipService;

@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostByUserId(Long userId);
+
+
     @Query("SELECT p FROM Post p WHERE p.user.id IN :friendIds OR p.user.id = :userId ORDER BY p.createAt DESC")
     List<Post> findPostsForUser(@Param("userId") Long userId, @Param("friendIds") List<Long> friendIds);
 

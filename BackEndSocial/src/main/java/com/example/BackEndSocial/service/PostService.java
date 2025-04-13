@@ -16,6 +16,5 @@ public interface PostService {
     public void deletePost(Long postId);
 
     public List<PostResponse> getPostsByUser(Long userId);
-
     public List<PostResponse> getPostsForUser(Long userId, int page, int size);
 }

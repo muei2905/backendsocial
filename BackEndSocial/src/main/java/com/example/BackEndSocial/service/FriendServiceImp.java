@@ -6,6 +6,7 @@ import com.example.BackEndSocial.repository.FriendshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -43,8 +44,10 @@ public class FriendServiceImp implements FriendService{
     }
     @Override
     public List<User> searchFriendsByFullName(Long userId, String name) {
-        return friendshipRepository.findFriendsByFullName(userId, name);
+        String normalizedName = normalize(name); // bỏ dấu
+        return friendshipRepository.findFriendsByFullName(userId, normalizedName);
     }
+
     @Override
     public boolean unfriend(User user, User friend) {
         Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);
@@ -56,4 +59,13 @@ public class FriendServiceImp implements FriendService{
         }
         return false;
     }
+
+    public static String normalize(String input) {
+        if (input == null) return null;
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return normalized.replaceAll("\\p{M}", "") // bỏ dấu
+                .replaceAll("[đĐ]", "d")   // chuyển đ -> d
+                .toLowerCase();            // chuyển về chữ thường
+    }
+
 }
