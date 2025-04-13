@@ -13,7 +13,7 @@ public interface PostService {
 
     public Post updatePost(Long postId, PostDTO req);
 
-    public void deletePost(Long postId);
+    public void deletePost(Long postId, User currentUser);
 
     public List<PostResponse> getPostsByUser(Long userId, User user);
     public List<PostResponse> getPostsForUser(Long userId, int page, int size, User currentUser);

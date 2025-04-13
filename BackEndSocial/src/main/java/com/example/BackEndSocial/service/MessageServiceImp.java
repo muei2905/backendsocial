@@ -104,6 +104,7 @@ public class MessageServiceImp implements MessageService{
         }
 
         message.setDeleted(true);
+        message.setDeletedAt(LocalDateTime.now());
         messageRepository.save(message);
     }
 

@@ -11,7 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 @RestController
 @RequestMapping("/api/messages")
@@ -22,16 +24,24 @@ public class MessageController {
     private UserService userService;
 
     @GetMapping("/between")
-    public ResponseEntity<Page<Message>> getMessagesBetween(
+    public ResponseEntity<Map<String, Object>> getMessagesBetween(
             @RequestHeader("Authorization") String jwt,
             @RequestParam Long receiverId,
             @RequestParam int page,
             @RequestParam(defaultValue = "20") int size) throws Exception {
 
         User user = userService.findUserByJwtToken(jwt);
-        Page<Message> messages = messageService.getMessagesBetween(user.getId(), receiverId, page, size);
-        return ResponseEntity.ok(messages);
+        Page<Message> pageMessages = messageService.getMessagesBetween(user.getId(), receiverId, page, size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("messages", pageMessages.getContent());
+        response.put("currentPage", pageMessages.getNumber());
+        response.put("totalItems", pageMessages.getTotalElements());
+        response.put("totalPages", pageMessages.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
+
 
 
     @PatchMapping("/read/{id}")

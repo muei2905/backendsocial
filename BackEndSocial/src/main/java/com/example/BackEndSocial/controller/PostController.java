@@ -36,8 +36,9 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId, @RequestHeader("Authorization") String jwt) {
-        postService.deletePost(postId);
+    public ResponseEntity<?> deletePost(@PathVariable Long postId, @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        postService.deletePost(postId, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

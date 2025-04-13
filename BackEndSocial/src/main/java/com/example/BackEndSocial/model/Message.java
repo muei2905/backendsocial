@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -24,6 +26,7 @@ public class Message {
     @JoinColumn(name = "receiver_id", referencedColumnName = "id")
     private User receiver;
 
+    private LocalDateTime deletedAt;
     private String content;
     private String picture;
     private String timestamp;

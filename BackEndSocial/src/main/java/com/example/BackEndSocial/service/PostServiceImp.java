@@ -61,11 +61,18 @@ public class PostServiceImp implements PostService{
     }
 
     @Override
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, User currentUser) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        // ✅ Check quyền sở hữu
+        if (!post.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("You are not authorized to delete this post");
+        }
+
         postRepository.deleteById(postId);
     }
+
 
     @Override
     public List<PostResponse> getPostsByUser(Long userId, User currentUser) {
