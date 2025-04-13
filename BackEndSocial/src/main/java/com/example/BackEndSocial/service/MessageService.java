@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface MessageService {
     public Page<Message> getMessagesBetween(Long userId, Long contactId, int page, int size);
     void markAsRead(Long messageId);
-    void deleteMessage(Long messageId);
+    public void deleteMessage(Long messageId, String jwt) throws Exception;
     public Message saveMessage(MessageDTO messageDTO);
     public List<User> getUserContacts(Long userId);
     public List<ContactPreviewDTO> getContactsWithLastMessage(Long userId);

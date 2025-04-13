@@ -31,6 +31,9 @@ public class MessageServiceImp implements MessageService{
     private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Async
@@ -90,11 +93,20 @@ public class MessageServiceImp implements MessageService{
     }
 
     @Override
-    public void deleteMessage(Long messageId) {
-        Message message = messageRepository.findById(messageId).orElseThrow();
+    public void deleteMessage(Long messageId, String jwt) throws Exception {
+        User currentUser = userService.findUserByJwtToken(jwt);
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Message not found"));
+
+        // Kiểm tra người dùng hiện tại có phải là người gửi không
+        if (!message.getSender().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("You are not allowed to delete this message.");
+        }
+
         message.setDeleted(true);
         messageRepository.save(message);
     }
+
     @Override
     public Page<Message> getMessagesBetween(Long userId, Long contactId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());

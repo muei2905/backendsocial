@@ -1,5 +1,6 @@
 package com.example.BackEndSocial.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class PostLike {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Post post;
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -41,8 +41,8 @@ public class MessageController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable Long id, @RequestHeader("Authorization") String jwt) {
-        messageService.deleteMessage(id);
+    public ResponseEntity<Void> deleteMessage(@PathVariable Long id, @RequestHeader("Authorization") String jwt) throws Exception {
+        messageService.deleteMessage(id, jwt);
         return ResponseEntity.ok().build();
     }
 
