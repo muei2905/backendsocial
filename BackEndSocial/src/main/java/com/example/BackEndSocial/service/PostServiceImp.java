@@ -40,6 +40,8 @@ public class PostServiceImp implements PostService{
         post.setViewMode(req.getViewMode() != null ? req.getViewMode() : "public");
         return postRepository.save(post);
     }
+
+
     @Override
     public List<PostResponse> getPostsForUser(Long userId, int page, int size) {
         List<Long> friendIds = friendService.getFriendIds(userId);
@@ -81,7 +83,7 @@ public class PostServiceImp implements PostService{
         dto.setTotalCmt(post.getTotalCmt());
         dto.setViewMode(post.getViewMode());
         dto.setUserName(post.getUser().getFullName());
-
+        dto.setAvatar(post.getUser().getAvatar());
         // Comments
         List<CommentResponse> commentDTOs = post.getComments().stream().map(cmt -> {
             CommentResponse cr = new CommentResponse();
