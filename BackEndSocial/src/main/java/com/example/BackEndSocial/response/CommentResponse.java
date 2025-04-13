@@ -9,4 +9,5 @@ public class CommentResponse {
     private String content;
     private String userName;
     private LocalDateTime time;
+    private String userImg;
 }

@@ -91,6 +91,7 @@ public class PostServiceImp implements PostService{
             cr.setContent(cmt.getContent());
             cr.setUserName(cmt.getUser().getFullName());
             cr.setTime(cmt.getTime());
+            cr.setUserImg(cmt.getUser().getAvatar());
             return cr;
         }).collect(Collectors.toList());
         dto.setComments(commentDTOs);
@@ -102,6 +103,7 @@ public class PostServiceImp implements PostService{
                     PostLikeUserResponse lur = new PostLikeUserResponse();
                     lur.setId(like.getUser().getId());
                     lur.setUsername(like.getUser().getFullName());
+                    lur.setUserImg(like.getUser().getAvatar());
                     return lur;
                 }).collect(Collectors.toList());
         dto.setLikedUsers(likedUsers);
