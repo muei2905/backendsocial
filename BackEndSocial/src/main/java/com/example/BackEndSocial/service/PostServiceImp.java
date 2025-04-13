@@ -43,11 +43,11 @@ public class PostServiceImp implements PostService{
 
 
     @Override
-    public List<PostResponse> getPostsForUser(Long userId, int page, int size) {
+    public List<PostResponse> getPostsForUser(Long userId, int page, int size, User currentUser) {
         List<Long> friendIds = friendService.getFriendIds(userId);
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
         Page<Post> postPage = postRepository.findPostsForUser(userId, friendIds, pageable);
-        return postPage.stream().map(this::mapToPostResponse).collect(Collectors.toList());
+        return postPage.stream().map(p -> mapToPostResponse(p, currentUser)).collect(Collectors.toList());
     }
 
     @Override
@@ -68,12 +68,12 @@ public class PostServiceImp implements PostService{
     }
 
     @Override
-    public List<PostResponse> getPostsByUser(Long userId) {
+    public List<PostResponse> getPostsByUser(Long userId, User currentUser) {
         List<Post> posts = postRepository.findPostByUserId(userId);
-        return posts.stream().map(this::mapToPostResponse).collect(Collectors.toList());
+        return posts.stream().map(p -> mapToPostResponse(p, currentUser)).collect(Collectors.toList());
     }
 
-    private PostResponse mapToPostResponse(Post post) {
+    private PostResponse mapToPostResponse(Post post, User currentUser) {
         PostResponse dto = new PostResponse();
         dto.setId(post.getId());
         dto.setContent(post.getContent());
@@ -107,7 +107,9 @@ public class PostServiceImp implements PostService{
                     return lur;
                 }).collect(Collectors.toList());
         dto.setLikedUsers(likedUsers);
-
+        boolean likedByCurrentUser = post.getLikes().stream()
+                .anyMatch(like -> like.isLike() && like.getUser().getId().equals(currentUser.getId()));
+        dto.setLikedByMe(likedByCurrentUser);
         return dto;
     }
 }

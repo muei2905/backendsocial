@@ -43,14 +43,16 @@ public class PostController {
 
     @GetMapping("/me")
     public ResponseEntity<List<PostResponse>> getMyPosts(@RequestHeader("Authorization") String jwt) throws Exception {
+
         User user= userService.findUserByJwtToken(jwt);
-        List<PostResponse> posts = postService.getPostsByUser(user.getId());
+        List<PostResponse> posts = postService.getPostsByUser(user.getId(), user);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PostResponse>> getPostsByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String jwt) {
-        List<PostResponse> posts = postService.getPostsByUser(userId);
+    public ResponseEntity<List<PostResponse>> getPostsByUserId(@PathVariable Long userId, @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        List<PostResponse> posts = postService.getPostsByUser(userId, user);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
@@ -64,7 +66,7 @@ public class PostController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        List<PostResponse> posts = postService.getPostsForUser(user.getId(), page, size);
+        List<PostResponse> posts = postService.getPostsForUser(user.getId(), page, size, user);
         return ResponseEntity.ok(posts);
     }
 }

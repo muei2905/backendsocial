@@ -18,6 +18,7 @@ public class PostResponse {
     private String viewMode;
     private String userName;
     private String avatar;
+    private boolean likedByMe;
 
     private List<CommentResponse> comments;
     private List<PostLikeUserResponse> likedUsers;
