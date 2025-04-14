@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class CommentServiceImp implements CommentService{
         comment.setPost(post);
         comment.setUser(user);
         comment.setContent(content);
-        comment.setTime(LocalDateTime.now());
+        comment.setTime(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         // +1 vào totalCmt
         post.setTotalCmt(post.getTotalCmt() + 1);
 

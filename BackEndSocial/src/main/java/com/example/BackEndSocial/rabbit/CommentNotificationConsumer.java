@@ -29,7 +29,6 @@ public class CommentNotificationConsumer {
             String email = parts[2];
             String notificationMessage = fullName + " đã bình luận: \"" + content + "\"";
 
-
             User user = userService.findUserByEmail(email);
             messagingTemplate.convertAndSendToUser(String.valueOf(user.getId()), "/queue/notifications", notificationMessage);
             Notification notification = new Notification();

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class FriendServiceImp implements FriendService{
 
         if (friendship.isPresent() && "PENDING".equals(friendship.get().getStatus())) {
             friendship.get().setStatus("ACCEPTED");
-            friendship.get().setUpdateAt(LocalDateTime.now());
+            friendship.get().setUpdateAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
             friendshipRepository.save(friendship.get());
             return true;
         }
@@ -53,7 +54,7 @@ public class FriendServiceImp implements FriendService{
         Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);
         if (friendship.isPresent() && "ACCEPTED".equals(friendship.get().getStatus())) {
             friendship.get().setStatus("UNFRIENDED");
-            friendship.get().setUpdateAt(LocalDateTime.now());
+            friendship.get().setUpdateAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
             friendshipRepository.save(friendship.get());
             return true;
         }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class NotificationServiceImp implements NotificationService{
         notification.setUser(user);
         notification.setType(notificationDto.getType());
         notification.setMessage(notificationDto.getMessage());
-        notification.setCreatedAt(LocalDateTime.now());
+        notification.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         notification.setRead(false);
         return notificationRepository.save(notification);
     }

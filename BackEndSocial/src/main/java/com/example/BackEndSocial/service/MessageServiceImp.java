@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +105,7 @@ public class MessageServiceImp implements MessageService{
         }
 
         message.setDeleted(true);
-        message.setDeletedAt(LocalDateTime.now());
+        message.setDeletedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         messageRepository.save(message);
     }
 

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class PostServiceImp implements PostService{
         post.setUser(user);
         post.setContent(req.getContent());
         post.setImageUrl(req.getImageUrl());
-        post.setCreateAt(LocalDateTime.now());
+        post.setCreateAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         post.setTotalLike(0);
         post.setTotalCmt(0);
         post.setViewMode(req.getViewMode() != null ? req.getViewMode() : "public");
