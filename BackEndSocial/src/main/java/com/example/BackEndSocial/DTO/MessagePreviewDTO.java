@@ -11,5 +11,5 @@ public class MessagePreviewDTO {
     private String content;
     private boolean sentByCurrentUser;
     private String timestamp;
-
+    private boolean isDeleted;
 }

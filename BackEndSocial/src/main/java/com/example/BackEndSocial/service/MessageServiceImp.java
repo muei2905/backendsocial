@@ -78,7 +78,8 @@ public class MessageServiceImp implements MessageService{
                 MessagePreviewDTO preview = new MessagePreviewDTO(
                         lastMessage.getContent(),
                         sentByCurrentUser,
-                        lastMessage.getTimestamp()
+                        lastMessage.getTimestamp(),
+                        lastMessage.isDeleted() // ➕ Truyền isDeleted về client
                 );
 
                 result.add(new ContactPreviewDTO(
@@ -92,6 +93,7 @@ public class MessageServiceImp implements MessageService{
 
         return result;
     }
+
 
     @Override
     public void deleteMessage(Long messageId, String jwt) throws Exception {
