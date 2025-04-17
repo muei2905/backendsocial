@@ -11,4 +11,7 @@ public interface FriendService {
     boolean unfriend(User user, User friend);
     List<Long> getFriendIds(Long userId);
     public List<User> searchFriendsByFullName(Long userId, String name);
+    List<User> getAllFriends(Long userId);
+    List<User> getSentFriendRequests(Long userId); // Lời mời đã gửi
+    List<User> getReceivedFriendRequests(Long userId);
 }

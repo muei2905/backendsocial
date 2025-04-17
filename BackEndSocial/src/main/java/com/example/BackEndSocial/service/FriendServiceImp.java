@@ -26,6 +26,20 @@ public class FriendServiceImp implements FriendService{
         return friendshipRepository.findFriendIdsByUserId(userId);
     }
     @Override
+    public List<User> getAllFriends(Long userId) {
+        return friendshipRepository.findAllFriendsByUserId(userId);
+    }
+
+    @Override
+    public List<User> getSentFriendRequests(Long userId) {
+        return friendshipRepository.findSentFriendRequests(userId);
+    }
+
+    @Override
+    public List<User> getReceivedFriendRequests(Long userId) {
+        return friendshipRepository.findReceivedFriendRequests(userId);
+    }
+    @Override
     public boolean acceptFriend(User user, User friend) {
         Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);
 

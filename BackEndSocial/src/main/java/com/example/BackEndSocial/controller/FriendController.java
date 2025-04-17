@@ -88,4 +88,24 @@ public class FriendController {
         List<User> friends = friendshipService.searchFriendsByFullName(user.getId(), name);
         return ResponseEntity.ok(friends);
     }
+    @GetMapping("/friends")
+    public ResponseEntity<List<User>> getAllFriends(@RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        List<User> friends = friendshipService.getAllFriends(user.getId());
+        return ResponseEntity.ok(friends);
+    }
+
+    @GetMapping("/sent-requests")
+    public ResponseEntity<List<User>> getSentFriendRequests(@RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        List<User> sentRequests = friendshipService.getSentFriendRequests(user.getId());
+        return ResponseEntity.ok(sentRequests);
+    }
+
+    @GetMapping("/received-requests")
+    public ResponseEntity<List<User>> getReceivedFriendRequests(@RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        List<User> receivedRequests = friendshipService.getReceivedFriendRequests(user.getId());
+        return ResponseEntity.ok(receivedRequests);
+    }
 }
