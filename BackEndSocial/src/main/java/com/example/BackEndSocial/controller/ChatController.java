@@ -3,6 +3,7 @@ package com.example.BackEndSocial.controller;
 import com.example.BackEndSocial.DTO.MessageDTO;
 import com.example.BackEndSocial.model.Message;
 import com.example.BackEndSocial.service.MessageService;
+import com.example.BackEndSocial.service.MessageServiceImp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
@@ -27,11 +28,15 @@ public class ChatController {
     @Autowired
     private SimpUserRegistry simpUserRegistry;
 
+    @Autowired
+    private MessageServiceImp messageServiceImp;
+
     @MessageMapping("/chat")
     public Message recMessage(@Payload MessageDTO messageDTO, Principal principal, @Header("simpSessionId") String sessionId) {
+        Message message = messageService.saveMessage(messageDTO);
+        messageDTO.setId(message.getId());
         messagingTemplate.convertAndSendToUser(String.valueOf(messageDTO.getReceiverId()), "/queue/messages", messageDTO);
         messagingTemplate.convertAndSendToUser(String.valueOf(messageDTO.getSenderId()), "/queue/messages", messageDTO);
-        Message message = messageService.saveMessage(messageDTO);
         return message;
     }
 

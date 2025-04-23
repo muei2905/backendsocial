@@ -14,4 +14,5 @@ public interface FriendService {
     List<User> getAllFriends(Long userId);
     List<User> getSentFriendRequests(Long userId); // Lời mời đã gửi
     List<User> getReceivedFriendRequests(Long userId);
+    public void cancelFriendRequest(Long userId, Long friendId);
 }

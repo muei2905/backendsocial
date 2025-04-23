@@ -52,4 +52,6 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     WHERE f.friend_id = :userId AND f.status = 'PENDING'
     """, nativeQuery = true)
     List<User> findReceivedFriendRequests(@Param("userId") Long userId);
+
+    Optional<Friendship> findByUserIdAndFriendId(Long userId, Long friendId);
 }

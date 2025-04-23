@@ -108,4 +108,12 @@ public class FriendController {
         List<User> receivedRequests = friendshipService.getReceivedFriendRequests(user.getId());
         return ResponseEntity.ok(receivedRequests);
     }
+    @DeleteMapping("/cancel")
+    public ResponseEntity<?> cancelFriendRequest(
+            @RequestParam Long userId,
+            @RequestParam Long friendId) {
+        friendshipService.cancelFriendRequest(userId, friendId);
+        return ResponseEntity.ok("Friend request canceled successfully.");
+    }
+
 }

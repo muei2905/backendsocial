@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDTO {
+    private Long id;
     private Long senderId;
     private Long receiverId;
     private String content;

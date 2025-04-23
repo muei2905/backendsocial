@@ -36,12 +36,13 @@ public class MessageServiceImp implements MessageService{
     private UserRepository userRepository;
 
     @Async
-    public void saveMessageAsync(MessageDTO messageDTO) {
-        saveMessage(messageDTO); // gọi method bình thường
+    public void saveAsync(MessageDTO message) {
+        saveMessage(message);
     }
 
     @Override
     public Message saveMessage(MessageDTO messageDTO) {
+
         User sender = userRepository.findById(messageDTO.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Sender not found"));
         User receiver = userRepository.findById(messageDTO.getReceiverId())
@@ -95,7 +96,7 @@ public class MessageServiceImp implements MessageService{
     @Override
     public MessageDTO getMessageById(Long id) {
         Message message = messageRepository.findById(id).orElseThrow(() -> new RuntimeException("Message not found"));
-        return new MessageDTO(message.getSender().getId(),message.getReceiver().getId(), message.getContent(), message.getPicture(), message.getTimestamp());
+        return new MessageDTO(message.getId(),message.getSender().getId(),message.getReceiver().getId(), message.getContent(), message.getPicture(), message.getTimestamp());
     }
 
 

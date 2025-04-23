@@ -39,6 +39,24 @@ public class FriendServiceImp implements FriendService{
     public List<User> getReceivedFriendRequests(Long userId) {
         return friendshipRepository.findReceivedFriendRequests(userId);
     }
+
+    @Override
+    public void cancelFriendRequest(Long userId, Long friendId) {
+        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(userId, friendId)
+                .orElse(friendshipRepository.findByUserIdAndFriendId(friendId, userId)
+                        .orElseThrow(() -> new RuntimeException("Friend request not found")));
+
+        if (!friendship.getUser().getId().equals(userId) && !friendship.getFriend().getId().equals(userId)) {
+            throw new RuntimeException("You don't have permission to cancel this friend request");
+        }
+
+        if (!"PENDING".equals(friendship.getStatus())) {
+            throw new RuntimeException("Only pending requests can be canceled");
+        }
+
+        friendshipRepository.delete(friendship);
+    }
+
     @Override
     public boolean acceptFriend(User user, User friend) {
         Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);
