@@ -1,6 +1,5 @@
 package com.example.BackEndSocial.service;
 
-import com.example.BackEndSocial.DTO.ChatMessageDTO;
 import com.example.BackEndSocial.DTO.ContactPreviewDTO;
 import com.example.BackEndSocial.DTO.MessageDTO;
 import com.example.BackEndSocial.DTO.MessagePreviewDTO;
@@ -21,8 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 @Service
 public class MessageServiceImp implements MessageService{
     @Autowired
@@ -94,9 +92,15 @@ public class MessageServiceImp implements MessageService{
         return result;
     }
 
+    @Override
+    public MessageDTO getMessageById(Long id) {
+        Message message = messageRepository.findById(id).orElseThrow(() -> new RuntimeException("Message not found"));
+        return new MessageDTO(message.getSender().getId(),message.getReceiver().getId(), message.getContent(), message.getPicture(), message.getTimestamp());
+    }
+
 
     @Override
-    public void deleteMessage(Long messageId, String jwt) throws Exception {
+    public Message deleteMessage(Long messageId, String jwt) throws Exception {
         User currentUser = userService.findUserByJwtToken(jwt);
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new RuntimeException("Message not found"));
@@ -109,6 +113,7 @@ public class MessageServiceImp implements MessageService{
         message.setDeleted(true);
         message.setDeletedAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         messageRepository.save(message);
+        return message;
     }
 
     @Override

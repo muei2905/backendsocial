@@ -39,4 +39,11 @@ public class UserServiceImp implements UserService{
 
         return userRepository.save(user);
     }
+
+    @Override
+    public User findUserByName(Long userId) {
+        return null;
+    }
+
+
 }

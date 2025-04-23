@@ -35,4 +35,31 @@ public class ChatController {
         return message;
     }
 
+    @MessageMapping("/chat")
+    public void markMessageAsRead(@Payload Map<String, Long> payload, Principal principal) {
+        Long messageId = payload.get("messageId");
+        messageService.markAsRead(messageId);
+
+        MessageDTO msg = messageService.getMessageById(messageId);
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(msg.getSenderId()), "/queue/read", msg
+        );
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(msg.getReceiverId()), "/queue/read", msg
+        );
+    }
+    @MessageMapping("/chat")
+    public void deleteMessage(@Payload Map<String, Long> payload, Principal principal) throws Exception {
+        Long messageId = payload.get("messageId");
+        Message deletedMessage = messageService.deleteMessage(messageId, principal.getName());
+
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(deletedMessage.getSender().getId()), "/queue/delete", deletedMessage
+        );
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(deletedMessage.getReceiver().getId()), "/queue/delete", deletedMessage
+        );
+    }
+
+
 }
