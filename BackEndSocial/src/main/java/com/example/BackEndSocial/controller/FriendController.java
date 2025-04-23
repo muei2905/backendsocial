@@ -110,9 +110,10 @@ public class FriendController {
     }
     @DeleteMapping("/cancel")
     public ResponseEntity<?> cancelFriendRequest(
-            @RequestParam Long userId,
-            @RequestParam Long friendId) {
-        friendshipService.cancelFriendRequest(userId, friendId);
+            @RequestHeader("Authorization") String jwt,
+            @RequestParam Long friendId) throws Exception {
+        User user= userService.findUserByJwtToken(jwt);
+        friendshipService.cancelFriendRequest(user.getId(), friendId);
         return ResponseEntity.ok("Friend request canceled successfully.");
     }
 
