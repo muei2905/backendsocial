@@ -26,4 +26,13 @@ public class UserController {
         User updatedUser = userService.updateUserProfile(id, request.getFullName(), request.getAvatar());
         return ResponseEntity.ok(updatedUser);
     }
+
+    @GetMapping("/findUser")
+    public ResponseEntity<User> findUserByEmail(@RequestHeader("Authorization") String jwt,@RequestParam String email) throws Exception {
+        User user = userService.findUserByEmail(email);
+        if (user!=null){
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }
