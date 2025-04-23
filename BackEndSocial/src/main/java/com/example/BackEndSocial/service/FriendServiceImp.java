@@ -42,9 +42,8 @@ public class FriendServiceImp implements FriendService{
 
     @Override
     public void cancelFriendRequest(Long userId, Long friendId) {
-        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(userId, friendId)
-                .orElse(friendshipRepository.findByUserIdAndFriendId(friendId, userId)
-                        .orElseThrow(() -> new RuntimeException("Friend request not found")));
+        Friendship friendship = friendshipRepository.findFriendshipBetweenUsers(userId, friendId)
+                .orElseThrow(() -> new RuntimeException("Friend request not found"));
 
         if (!friendship.getUser().getId().equals(userId) && !friendship.getFriend().getId().equals(userId)) {
             throw new RuntimeException("You don't have permission to cancel this friend request");
