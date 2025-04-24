@@ -67,9 +67,7 @@ public class FriendServiceImp implements FriendService{
     public boolean unfriend(User user, User friend) {
         Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);
         if (friendship.isPresent() && "ACCEPTED".equals(friendship.get().getStatus())) {
-            friendship.get().setStatus("UNFRIENDED");
-            friendship.get().setUpdateAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
-            friendshipRepository.save(friendship.get());
+            friendshipRepository.delete(friendship.get());
             return true;
         }
         return false;
