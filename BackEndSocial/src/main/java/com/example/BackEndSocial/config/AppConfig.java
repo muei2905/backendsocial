@@ -47,7 +47,7 @@ public class AppConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfs = new CorsConfiguration();
                 cfs.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:3000", "http://localhost:5173", "http://localhost:5174"
+                        "http://localhost:3000", "http://localhost:5173", "http://localhost:5174", "https://frontendsocial.vercel.app"
                 ));
                 cfs.setAllowedMethods(Collections.singletonList("*"));
                 cfs.setAllowCredentials(true);
