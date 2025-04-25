@@ -82,11 +82,16 @@ public class FriendServiceImp implements FriendService{
 
     @Override
     public boolean unfriend(User user, User friend) {
-        Optional<Friendship> friendship = friendshipRepository.findByUserAndFriend(user, friend);
-        if (friendship.isPresent() && "ACCEPTED".equals(friendship.get().getStatus())) {
-            friendship.get().setStatus("UNFRIENDED");
-            friendship.get().setUpdateAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
-            friendshipRepository.save(friendship.get());
+        Optional<Friendship> friendship1 = friendshipRepository.findByUserAndFriend(user, friend);
+        Optional<Friendship> friendship2 = friendshipRepository.findByUserAndFriend(friend, user);
+
+        if (friendship1.isPresent() && "ACCEPTED".equalsIgnoreCase(friendship1.get().getStatus())) {
+            friendshipRepository.delete(friendship1.get());
+            return true;
+        }
+
+        if (friendship2.isPresent() && "ACCEPTED".equalsIgnoreCase(friendship2.get().getStatus())) {
+            friendshipRepository.delete(friendship2.get());
             return true;
         }
         return false;
